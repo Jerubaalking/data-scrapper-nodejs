@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraper Input</title>
+
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+    {{{body}}}
+    </div>
+
+    <!-- Include Bootstrap JS and Popper.js -->
+    <script src="/public/js/jquery-3.5.1.slim.min.js"></script>
+    <script src="/public/js/popper.min.js"></script>
+    <script src="/public/js/bootstrap.min.js"></script>
+
+    <script>
+      function submitForm() {
+        const url = document.getElementById('url').value;
+        const elementId = document.getElementById('elementId').value;
+        const limit = document.getElementById('limit').value;
+        const saveFormat = document.getElementById('saveFormat').value;
+        const parentId = document.getElementById('parentId').value;
+        if (url.trim() !== '') {
+          const scraperURL = '/scrape?url='+encodeURIComponent(url)+'&parentId='+parentId+'&limit='+limit+'&elementId='+elementId+'&saveFormat='+saveFormat;
+          window.location.href = scraperURL;
+        } else {
+          alert('Please enter a valid URL.');
+        }
+      }
+    </script>
+  </body>
+  </html>

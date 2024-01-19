@@ -1,0 +1,22 @@
+<div style="margin-top: 50px; position:relative;">
+<h3 class="m-5">Businesses scraped from : {{url}}</h3>
+
+</div>
+
+<table class="table table-bordered table-striped" style="margin-top: 50px; position:static;" width="50%">
+    <thead>
+        <th>name</th>
+        <th>address</th>
+        <th>description</th>
+    </thead>
+    <tbody id="tableBodyBusiness">
+         {{#each businesses}}
+        <tr>
+          <td>{{this.name}}</td>
+          <td>{{this.address}}</td>
+          <td>{{this.description}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+    
+</table>

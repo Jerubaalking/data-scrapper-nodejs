@@ -1,0 +1,26 @@
+<div class="container mt-4">
+      <h2>Web Scraper Input</h2>
+      <form id="scraperForm">
+        <div class="form-group">
+          <label for="url">Website URL:</label>
+          <input type="text" class="form-control" id="url" name="url" required>
+        </div>
+        <div class="form-group">
+          <label for="limit">Item Limit</label>
+          <input type="text" class="form-control" id="limit" name="limit" required>
+        </div>
+        <div class="form-group">
+          <label for="parentId">Parent ID (start with #) or Class (start with .)</label>
+          <input type="text" class="form-control" id="parentId" name="parentId" required>
+        </div>
+        <div class="form-group">
+          <label for="elementId">Element ID (#)</label>
+          <input type="text" class="form-control" id="elementId" name="elementId" required>
+        </div>
+        <div class="form-group">
+          <label for="saveFormat">Save format (csv/json)</label>
+          <input type="text" class="form-control" id="saveFormat" name="saveFormat" required>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="submitForm()">Scrape Data</button>
+      </form>
+    </div>
