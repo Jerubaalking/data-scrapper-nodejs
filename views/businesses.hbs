@@ -2,21 +2,29 @@
 <h3 class="m-5">Businesses scraped from : {{url}}</h3>
 
 </div>
-
-<table class="table table-bordered table-striped" style="margin-top: 50px; position:static;" width="50%">
-    <thead>
+  <div class="container mt-4" style="margin-bottom: 200px;">
+    <table class="table table-bordered table-striped" id="businessTable">
+      <thead>
         <th>name</th>
         <th>address</th>
         <th>description</th>
-    </thead>
-    <tbody id="tableBodyBusiness">
-         {{#each businesses}}
-        <tr>
-          <td>{{this.name}}</td>
-          <td>{{this.address}}</td>
-          <td>{{this.description}}</td>
-        </tr>
+      </thead>
+      <tbody id="tableBodyBusiness">
+        {{#each businesses}}
+          <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.address}}</td>
+            <td>{{this.description}}</td>
+          </tr>
         {{/each}}
-    </tbody>
-    
-</table>
+      </tbody>
+    </table>
+  </div>
+
+<!-- Initialize DataTables -->
+<script type="text/javascript" src="/public/js/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#businessTable').DataTable();
+  });
+</script>

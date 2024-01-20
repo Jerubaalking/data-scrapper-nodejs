@@ -6,7 +6,11 @@
           <input type="text" class="form-control" id="url" name="url" required>
         </div>
         <div class="form-group">
-          <label for="limit">Item Limit</label>
+          <label for="pages">Pages Limit to paginate </label>
+          <input type="text" class="form-control" id="pages" name="pages" required>
+        </div>
+        <div class="form-group">
+          <label for="limit">item Limit per page </label>
           <input type="text" class="form-control" id="limit" name="limit" required>
         </div>
         <div class="form-group">
@@ -23,4 +27,8 @@
         </div>
         <button type="button" class="btn btn-primary" onclick="submitForm()">Scrape Data</button>
       </form>
+      <div class="container mt-4">
+    <!-- Display messages here -->
+    <div id="messages"></div>
+  </div>
     </div>
