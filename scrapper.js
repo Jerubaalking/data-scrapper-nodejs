@@ -80,7 +80,6 @@ function saveToCSV(data, filePath) {
 function saveToJson(data, filePath) {
   try {
     const jsonData = JSON.stringify(data, null, 2);
-    console.log("data ===>", jsonData);
     fs.writeFileSync(filePath, jsonData);
     console.log("Data saved to JSON:", filePath);
   } catch (error) {
