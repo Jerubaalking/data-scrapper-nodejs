@@ -2,15 +2,23 @@
       <h2>Web Scraper Input</h2>
       <form id="scraperForm" method="post" enctype="application/x-www-form-urlencoded">
         <div class="form-group">
-          <label for="url">Website URL:</label>
-          <input type="text" class="form-control" value="https://www.tanzapages.com/location/Dar_Es_Salaam/" id="url" name="url" required>
+          <label for="url">Website Original URL:</label>
+          <input type="text" class="form-control" value="https://www.tanzapages.com/location/Dar_Es_Salaam" id="url" name="url" required>
         </div>
         <div class="form-group">
-          <label for="pages">Pages Limit to paginate </label>
+          <label for="region">route</label>
+          <input type="text" class="form-control" value="/location/Dar_Es_Salaam" id="region" name="region" required>
+        </div>
+        <div class="form-group">
+          <label for="start">start page</label>
+          <input type="text" class="form-control" value="1" id="start" name="start" required>
+        </div>
+        <div class="form-group">
+          <label for="pages">Number of pages </label>
           <input type="text" class="form-control" value="2" id="pages" name="pages" required>
         </div>
         <div class="form-group">
-          <label for="limit">item Limit per page </label>
+          <label for="limit">Items per page </label>
           <input type="text" class="form-control" value="20" id="limit" name="limit" required>
         </div>
         <div class="form-group">
@@ -23,7 +31,7 @@
         </div>
         <div class="form-group">
           <label for="saveFormat">Save format (csv/json)</label>
-          <input type="text" class="form-control" value="json" id="saveFormat" name="saveFormat" required>
+          <input type="text" class="form-control" id="saveFormat" name="saveFormat" required>
         </div>
         <button type="button" class="btn btn-primary" onclick="submitForm()">Scrape Data</button>
       </form>

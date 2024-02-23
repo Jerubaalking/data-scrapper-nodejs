@@ -10,13 +10,15 @@
         <th>description</th>
       </thead>
       <tbody id="tableBodyBusiness">
-        {{#each businesses}}
+        {{#foreach business businesses}}
           <tr>
             <td>{{name}}</td>
             <td>{{address}}</td>
             <td>{{description}}</td>
           </tr>
         {{/each}}
+
+        {{#sum 3 4}}
       </tbody>
     </table>
   </div>

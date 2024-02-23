@@ -29,6 +29,8 @@
     const limit = document.getElementById('limit').value;
     const pages = document.getElementById('pages').value;
     const saveFormat = document.getElementById('saveFormat').value;
+    const region = document.getElementById('region').value;
+    const start = document.getElementById('start').value;
 
     // Display loading message
     document.getElementById('messages').innerHTML = 'Scraping in progress...';
@@ -38,7 +40,7 @@
       method:'POST',
       url:'/scrape',
       type:'application/json',
-      data:{url,elementId, limit,pages,saveFormat},
+      data:{url,elementId, limit,pages,saveFormat, region, start},
       success:async (response)=>{ 
         if (!response.ok) {
           // If the response status is not okay, throw an error

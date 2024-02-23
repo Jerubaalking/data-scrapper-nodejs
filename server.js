@@ -7,7 +7,8 @@ const { engine } = require('express-handlebars');
 const app = express();
 
 // Set up Handlebars as the view engine
-app.engine('.hbs', engine({ extname: '.hbs' }));
+app.engine('.hbs', engine({ extname: '.hbs' })); // templating engine
+
 app.set('view engine', '.hbs');
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
@@ -19,13 +20,13 @@ app.get('/', (req, res) => {
 
 app.post('/scrape', (req, res) => {
   try {
-    console.log("request body -->", req.body);
-    const { url, elementId, limit, pages, saveFormat } = req.body;
-    console.log(elementId, url, limit, pages, saveFormat)
+    // console.log("request body -->", req.body);
+    const { url, elementId, limit, pages, saveFormat, region, start } = req.body;
+    console.log(elementId, url, limit, pages, saveFormat, region, start)
     // Spawn the child process
-    const scraperChild = fork(path.join(__dirname, 'scraperChild.js'), [url, elementId, limit, pages, saveFormat]);
+    const scraperChild = fork(path.join(__dirname, 'engine/scraperChild.js'), [url, elementId, limit, pages, saveFormat, region, start]);
 
-    // const notifications = [];  
+    const notifications = [];
 
     // Listen for messages from the child process
     scraperChild.on('message', (notification) => {
@@ -49,7 +50,7 @@ app.post('/scrape', (req, res) => {
 app.get('/businesses', async (req, res) => {
   try {
     // Read the scraped data from the file
-    const businesses = [require('./scraped_data.json')];
+    const businesses = [require('./data/json/scraped_data.json')];
     console.log("am here", businesses);
     // Render the 'businesses' view with the data
     res.render('businesses', { businesses: businesses });
