@@ -30,8 +30,51 @@ async function scrapeData(html) {
 
 function saveToJson(data, filePath) {
   const jsonData = JSON.stringify(data, null, 2);
-  fs.writeFileSync(filePath, jsonData);
+  addObjectIfNotExists(filePath, jsonData);
+  // fs.writeFileSync(filePath, jsonData);
   console.log('Data saved to JSON:', filePath);
+}
+
+function addObjectIfNotExists(filename, newObj) {
+  // Read the existing JSON file
+  fs.readFile(filename, 'utf8', (err, data) => {
+      if (err) {
+          // Handle file read error
+          console.error('Error reading file:', err);
+          return;
+      }
+
+      let existingData = [];
+      
+      try {
+          // Parse the existing data
+          existingData = JSON.parse(data);
+      } catch (parseError) {
+          // Handle JSON parse error
+          console.error('Error parsing JSON:', parseError);
+          return;
+      }
+
+      // Check if the new object already exists
+      const objectExists = existingData.some(obj => JSON.stringify(obj) === JSON.stringify(newObj));
+
+      if (!objectExists) {
+          // Add the new object to the existing data
+          existingData.push(newObj);
+
+          // Write the updated data back to the file
+          fs.writeFile(filename, JSON.stringify(existingData, null, 2), 'utf8', (writeErr) => {
+              if (writeErr) {
+                  // Handle file write error
+                  console.error('Error writing file:', writeErr);
+              } else {
+                  console.log('Object added successfully.');
+              }
+          });
+      } else {
+          console.log('Object already exists in the file.');
+      }
+  });
 }
 
 async function main(url) {

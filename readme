@@ -1,0 +1,42 @@
+# Web Scraping Project
+
+## Introduction
+
+This Node.js script is designed to scrape data from a specific website - [https://www.tanzapages.com](https://www.tanzapages.com) - with the provided parameters.
+
+## Usage
+
+### 1. Installation
+
+Make sure you have Node.js installed on your machine. Additionally, install the required libraries using the following command:
+
+```bash
+npm install axios cheerio
+```
+
+### 2. Script Configuration
+Open the script and modify the following parameters according to your requirements:
+
+url: The base URL of the website you want to scrape (e.g., https://www.tanzapages.com/location/Dar_Es_Salaam/{page}).
+pages_limit: The number of pages to scrape. Set it to the desired limit (e.g., 10).
+items_limit_per_page: The maximum number of items to scrape per page (e.g., 20).
+parent_selector: The CSS selector for the parent element holding the entire list (e.g., '.xyz' or '#xyz').
+element_selectors: An array of CSS selectors representing individual item data within the parent element.
+save_format: Defines how you want your data saved. Available options are 'csv' or 'json'.
+### 3. Run the Script
+Execute the script using the following command:
+
+```bash
+node server.js
+```
+### 4. Output
+The scraped data will be saved in either CSV or JSON format based on your specified preference.
+
+CSV: The data will be saved in a file named scraped_data.csv.
+JSON: The data will be saved in a file named scraped_data.json.
+Disclaimer
+Ensure that you have the legal right to scrape data from the specified website and adhere to their terms of service.
+
+License
+This script is provided under the MIT License.
+

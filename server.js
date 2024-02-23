@@ -27,20 +27,20 @@ app.post('/scrape', (req, res) => {
 
     // const notifications = [];  
 
-    // // Listen for messages from the child process
-    // scraperChild.on('message', (notification) => {
-    //   // Handle notifications here (e.g., update UI based on the notification)
-    //   console.log('Notification from child process:', notification);
-    //   notifications.push(notification);
-    // });
+    // Listen for messages from the child process
+    scraperChild.on('message', (notification) => {
+      // Handle notifications here (e.g., update UI based on the notification)
+      console.log('Notification from child process:', notification);
+      notifications.push(notification);
+    });
 
-    // // Handle child process exit
-    // scraperChild.on('exit', (code) => {
-    //   console.log('Child process exited with code', code);
+    // Handle child process exit
+    scraperChild.on('exit', (code) => {
+      console.log('Child process exited with code', code);
 
-    //   // Send the response once, after processing all notifications
-    //   res.send(notifications);
-    // });
+      // Send the response once, after processing all notifications
+      res.send(notifications);
+    });
   } catch (error) {
     console.log(error);
   }
@@ -49,10 +49,10 @@ app.post('/scrape', (req, res) => {
 app.get('/businesses', async (req, res) => {
   try {
     // Read the scraped data from the file
-    const businesses = require('./scraped_data.json');
-
+    const businesses = [require('./scraped_data.json')];
+    console.log("am here", businesses);
     // Render the 'businesses' view with the data
-    res.render('businesses', { businesses });
+    res.render('businesses', { businesses: businesses });
   } catch (error) {
     console.error('Error rendering businesses page:', error);
     res.status(500).send('Internal Server Error');
