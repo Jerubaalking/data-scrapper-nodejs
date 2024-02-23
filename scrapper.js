@@ -23,6 +23,7 @@ async function scrapeData(html, params, notifyCallback) {
     const pageUrl = page === 1 ? `${params.url}` : `${params.url}/${page}`;
 
     try {
+      console.log("fetching page URL --->>", pageUrl)
       const pageHtml = await fetchData(pageUrl);
       console.log("Page HTML:", pageHtml); // Log page HTML
 
@@ -39,9 +40,6 @@ async function scrapeData(html, params, notifyCallback) {
 
   return companies;
 }
-
-// ... (rest of the code)
-
 
 
 function scrapePageData(html, params) {
@@ -93,7 +91,7 @@ function saveToJson(data, filePath) {
 async function main(url, params = { elementId, limit, pages, saveFormat }, notifyCallback) {
   try {
     const html = await fetchData(url);
-    
+
     // Notify the client that scraping has started
     notifyCallback({ status: 'start' });
 
@@ -101,14 +99,14 @@ async function main(url, params = { elementId, limit, pages, saveFormat }, notif
 
     // Specify the path where you want to save the output file// Specify the path where you want to save the output file
     const filePath = path.join(__dirname, "scraped_data");
-    // console.log("data ===>>",scrapedData);
+    console.log("data ===>>", params);
 
     switch (params.saveFormat) {
-      case "json":
-        saveToJson(scrapedData, filePath + ".json");
+      case "csv":
+        saveToCSV(scrapedData, filePath + ".csv");
         break;
       default:
-        saveToCSV(scrapedData, filePath + ".csv");
+        saveToJson(scrapedData, filePath + ".json");
         break;
     }
 

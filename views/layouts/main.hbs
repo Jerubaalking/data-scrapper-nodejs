@@ -22,28 +22,44 @@
 <script type="text/javascript" src="public/js/jquery.dataTables.js"></script>
 
    <script>
-    function submitForm() {
-      const url = document.getElementById('url').value;
-      const elementId = document.getElementById('elementId').value;
-      const limit = document.getElementById('limit').value;
-      const pages = document.getElementById('pages').value;
-      const saveFormat = document.getElementById('saveFormat').value;
+    async function submitForm() {
+  try {
+    const url = document.getElementById('url').value;
+    const elementId = document.getElementById('elementId').value;
+    const limit = document.getElementById('limit').value;
+    const pages = document.getElementById('pages').value;
+    const saveFormat = document.getElementById('saveFormat').value;
 
-      // Display loading message
-      document.getElementById('messages').innerHTML = 'Scraping in progress...';
+    // Display loading message
+    document.getElementById('messages').innerHTML = 'Scraping in progress...';
+  console.log("body data --->", url, elementId,limit,pages,saveFormat);
+    // Make an AJAX request to start scraping
+    $.ajax({
+      method:'POST',
+      url:'/scrape',
+      type:'application/json',
+      data:{url,elementId, limit,pages,saveFormat},
+      success:async (response)=>{ 
+        if (!response.ok) {
+          // If the response status is not okay, throw an error
+          throw new Error(`Failed to scrape: ${response.status} - ${response.statusText}`);
+        }
 
-      // Make an AJAX request to start scraping
-      fetch(`/scrape?url=${encodeURIComponent(url)}&limit=${limit}&elementId=${elementId}&saveFormat=${saveFormat}&pages=${pages}`)
-        .then(response => response.json())
-        .then(data => {
-          // Display success message
-          document.getElementById('messages').innerHTML = 'Scraping completed successfully!';
-        })
-        .catch(error => {
-          // Display error message
-          document.getElementById('messages').innerHTML = `Error during scraping: ${error.message}`;
-        });
-    }
+        const data = await response.json();
+
+        // Display success message
+        document.getElementById('messages').innerHTML = 'Scraping completed successfully!';
+
+      }
+    })
+    // Process and display the scraped data as needed
+
+  } catch (error) {
+    // Display error message
+    document.getElementById('messages').innerHTML = `Error during scraping: ${error.message}`;
+  }
+}
+
   </script>
   </body>
   </html>

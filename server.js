@@ -1,5 +1,6 @@
 const express = require('express');
 const { fork } = require('child_process');
+const bodyParser = require('body-parser');
 const path = require('path');
 const { engine } = require('express-handlebars');
 
@@ -10,18 +11,21 @@ app.engine('.hbs', engine({ extname: '.hbs' }));
 app.set('view engine', '.hbs');
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
+app.use(bodyParser.json()); // Parse JSON requests
+app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded data
 app.get('/', (req, res) => {
   res.render('index');
 });
 
-app.get('/scrape', (req, res) => {
+app.post('/scrape', (req, res) => {
   try {
-    const {url, elementId, limit, pages, saveFormat} = req.query;
-    console.log(elementId, url,limit, pages, saveFormat)
+    console.log("request body -->", req.body);
+    const { url, elementId, limit, pages, saveFormat } = req.body;
+    console.log(elementId, url, limit, pages, saveFormat)
     // Spawn the child process
-    const scraperChild = fork(path.join(__dirname, 'scraperChild.js'), [url,elementId, limit,pages,saveFormat]);
+    const scraperChild = fork(path.join(__dirname, 'scraperChild.js'), [url, elementId, limit, pages, saveFormat]);
 
-    // const notifications = [];
+    // const notifications = [];  
 
     // // Listen for messages from the child process
     // scraperChild.on('message', (notification) => {
