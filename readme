@@ -11,14 +11,13 @@ Usage
 Make sure you have Node.js installed on your machine. Additionally, install the required libraries using the following command:
 
 ```bash
-npm install axios cheerio
-
+npm install axios cheerio 
 ```
 
 2. Script Configuration
 Open the script and modify the following parameters according to your requirements:
 
-url: The base URL of the website you want to scrape (e.g., https://www.tanzapages.com/location/Dar_Es_Salaam/{page}).
+url: The base URL of the website you want to scrape (e.g., https://www.example.com/).
 pages_limit: The number of pages to scrape. Set it to the desired limit (e.g., 10).
 items_limit_per_page: The maximum number of items to scrape per page (e.g., 20).
 parent_selector: The CSS selector for the parent element holding the entire list (e.g., '.xyz' or '#xyz').
