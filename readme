@@ -10,8 +10,10 @@ This Node.js script is designed to scrape data from a specific website - [https:
 
 Make sure you have Node.js installed on your machine. Additionally, install the required libraries using the following command:
 
-```bash
+```
+bash
 npm install axios cheerio
+
 ```
 
 ### 2. Script Configuration
@@ -26,8 +28,10 @@ save_format: Defines how you want your data saved. Available options are 'csv' o
 ### 3. Run the Script
 Execute the script using the following command:
 
-```bash
+```
+bash
 node server.js
+
 ```
 ### 4. Output
 The scraped data will be saved in either CSV or JSON format based on your specified preference.
