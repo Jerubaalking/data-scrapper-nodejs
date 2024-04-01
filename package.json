@@ -1,8 +1,8 @@
 {
-  "name": "datascrapper",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "pekua",
+  "version": "0.0.1",
+  "description": "Pekua - scrap it is a scrapper build with js. It an event based scrapper utilizing processes to ofload the heavy task from your main process and notify you on the progress of the pekua process.",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,10 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.6.5",
-    "body-parser": "^1.20.2",
-    "cheerio": "^1.0.0-rc.12",
-    "express": "^4.18.2",
-    "express-handlebars": "^7.1.2",
-    "hbs": "^4.2.0"
+    "cheerio": "^1.0.0-rc.12"
   }
 }

@@ -1,64 +1,90 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 const fs = require("fs");
-const path = require("path");
 
 async function fetchData(url) {
   try {
     const response = await axios.get(url);
     return response.data;
   } catch (error) {
-    console.error("Error fetching data:", error.message);
-    throw error;
+    throw new Error(error);
   }
+}
+async function loadHtml(html){
+  return cheerio.load(html);
 }
 
 async function scrapeData(html, params, notifyCallback) {
-  const $ = cheerio.load(html);
+  try {
+    const $ = loadHtml(html);
 
-  const companies = [];
-  const totalPages = (parseInt($(".pages_no").last().text()) > 100) ? params.pages : parseInt($(".pages_no").last().text());
+    let mappedData = []; // Rename companies to mappedData
+    let totalPages = 1;
 
-  for (let page = 1; page <= totalPages; page++) {
-    const pageUrl = page === 1 ? `${params.url}` : `${params.url}/${page}`;
+    // Check if mapperContext is provided
+    if (params.mapperContext) {
+      const { pagination } = params.mapperContext;
 
-    try {
-      const pageHtml = await fetchData(pageUrl);
-      console.log("Page HTML:", pageHtml); // Log page HTML
+      // If pagination is specified in mapperContext, attempt to detect pagination elements
+      if (pagination) {
+        const { parentId, selectors } = pagination;
 
-      const pageCompanies = scrapePageData(pageHtml, params);
-      console.log("Page Companies:", pageCompanies); // Log page companies
+        // Attempt to find pagination elements based on provided selectors
+        for (let i = 0; i < selectors.length; i++) {
+          const paginationElements = $(parentId).find(selectors[i]);
 
-      companies.push(...pageCompanies);
-      notifyCallback({ status: 'progress', page });
-    } catch (error) {
-      console.error("Error fetching or scraping page data:", error.message);
-      notifyCallback({ status: 'error', error: error.message });
+          // If pagination elements are found, determine total pages
+          if (paginationElements.length > 0) {
+            totalPages = paginationElements.length;
+            break;
+          }
+        }
+      }
     }
-  }
 
-  return companies;
+    // Scraping loop
+    for (let page = 1; page <= totalPages; page++) {
+      const pageUrl = page === 1 ? `${params.url}` : `${params.url}/${page}`;
+
+      try {
+        const pageHtml = await fetchData(pageUrl);
+        console.log("Page HTML:", pageHtml); // Log page HTML
+
+        const pageMappedData = scrapePageData(pageHtml, params);
+        console.log("Page Mapped Data:", pageMappedData); // Log page companies
+
+        mappedData.push(...pageMappedData); // Rename companies to mappedData
+        notifyCallback({ status: "progress", page });
+      } catch (error) {
+        console.error("Error fetching or scraping page data:", error.message);
+        notifyCallback({ status: "error", error: error.message });
+      }
+    }
+
+    return mappedData; // Rename companies to mappedData
+  } catch (error) {
+    notifyCallback({ status: "error", error: error });
+  }
 }
 
 // ... (rest of the code)
 
-
-
 function scrapePageData(html, params) {
-  const $ = cheerio.load(html);
+  const $ = loadHtml(html);
 
   const pageCompanies = [];
-  const parentId = '.company.with_img';
+  const mapperContext = params.mapperContext || {};
 
-  console.log("scrap page data html", parentId);
-  $(parentId).each((index, element) => {
+  console.log("scrap page data html", mapperContext);
+  $(mapperContext.parentId).each((index, element) => {
     const company = {};
-    console.log("element ==>>", element);
-    // Extract data from each company div
-    company.name = $(element).find("h4 a").text().trim();
-    company.address = $(element).find(".address").text().trim();
-    company.description = $(element).find(".desc").text().trim();
-    company.logo = $(element).find(".logo img").attr("data-src");
+
+    // Extract data based on mapper context
+    for (const key in mapperContext.fields) {
+      const field = mapperContext.fields[key];
+      const value = $(element).find(field.selector).text().trim();
+      company[key] = value;
+    }
 
     pageCompanies.push(company);
   });
@@ -88,36 +114,4 @@ function saveToJson(data, filePath) {
   }
 }
 
-
-async function main(url, params = { elementId, limit, pages, saveFormat }, notifyCallback) {
-  try {
-    const html = await fetchData(url);
-    
-    // Notify the client that scraping has started
-    notifyCallback({ status: 'start' });
-
-    const scrapedData = await scrapeData(html, { ...params, url: url }, notifyCallback);
-
-    // Specify the path where you want to save the output file// Specify the path where you want to save the output file
-    const filePath = path.join(__dirname, "scraped_data");
-    // console.log("data ===>>",scrapedData);
-
-    switch (params.saveFormat) {
-      case "json":
-        saveToJson(scrapedData, filePath + ".json");
-        break;
-      default:
-        saveToCSV(scrapedData, filePath + ".csv");
-        break;
-    }
-
-    // Notify the client that scraping is done
-    notifyCallback({ status: 'done' });
-  } catch (error) {
-    console.error("Main process error:", error);
-    // Notify the client about the error
-    notifyCallback({ status: 'error', error: error.message });
-  }
-}
-
-module.exports = { main };
+module.exports = { fetchData, scrapeData, saveToCSV, saveToJson, loadHtml};
