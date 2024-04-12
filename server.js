@@ -1,25 +1,30 @@
 const express = require('express');
 const { fork } = require('child_process');
+const bodyParser = require('body-parser');
 const path = require('path');
 const { engine } = require('express-handlebars');
 
 const app = express();
 
 // Set up Handlebars as the view engine
-app.engine('.hbs', engine({ extname: '.hbs' }));
+app.engine('.hbs', engine({ extname: '.hbs' })); // templating engine
+
 app.set('view engine', '.hbs');
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
+app.use(bodyParser.json()); // Parse JSON requests
+app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded data
 app.get('/', (req, res) => {
   res.render('welcome/index');
 });
 
-app.get('/scrape', (req, res) => {
+app.post('/scrape', (req, res) => {
   try {
-    const {url, elementId, limit, pages, saveFormat} = req.query;
-    console.log(elementId, url,limit, pages, saveFormat)
+    // console.log("request body -->", req.body);
+    const { url, elementId, limit, pages, saveFormat, region, start } = req.body;
+    console.log(elementId, url, limit, pages, saveFormat, region, start)
     // Spawn the child process
-    const scraperChild = fork(path.join(__dirname, 'scraperChild.js'), [url,elementId, limit,pages,saveFormat]);
+    const scraperChild = fork(path.join(__dirname, 'engine/scraperChild.js'), [url, elementId, limit, pages, saveFormat, region, start]);
 
     const notifications = [];
 
@@ -45,10 +50,10 @@ app.get('/scrape', (req, res) => {
 app.get('/businesses', async (req, res) => {
   try {
     // Read the scraped data from the file
-    const businesses = [require('./scraped_data.json')];
+    const businesses = [require('./data/json/scraped_data.json')];
     console.log("am here", businesses);
     // Render the 'businesses' view with the data
-    res.render('businesses', { businesses:businesses });
+    res.render('businesses', { businesses: businesses });
   } catch (error) {
     console.error('Error rendering businesses page:', error);
     res.status(500).send('Internal Server Error');
