@@ -11,7 +11,7 @@ app.set('view engine', '.hbs');
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-  res.render('index');
+  res.render('welcome/index');
 });
 
 app.get('/scrape', (req, res) => {
